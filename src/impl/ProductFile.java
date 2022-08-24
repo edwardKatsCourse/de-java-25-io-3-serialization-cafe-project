@@ -6,64 +6,51 @@ import java.io.*;
 
 public class ProductFile {
 
-    public static String createProductFile(Product product) {
+    static String path = "cafe" + File.separator + "products" + File.separator;
+    static final String pathGeneralFile = "cafe" + File.separator + "products.cafe";
 
-        String path = "cafe" + File.separator
-                + "products" + File.separator
-                + product.getCategory();
+    public static String createProductFile(Product product) throws IOException {
+
+        String categoryDirectory = path + product.getCategory();
 
         if ( !Check.categoryExists(product.getCategory())) {
-            File directory = new File(path);
+            File directory = new File(categoryDirectory);
             directory.mkdirs();
 
         }
-            File productFile = new File(path + File.separator
+        File productFile = new File(categoryDirectory + File.separator
                     + product.getName() + ".cafe");
 
-        try(FileWriter fileWriter = new FileWriter(productFile);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-
-        // name^price^description^category^isAvailable
-            StringBuilder builder = new StringBuilder(product.getName());
-            builder.append("^");
-            builder.append(product.getPrice());
-            builder.append("^");
-            builder.append(product.getDescription());
-            builder.append("^");
-            builder.append(product.getCategory());
-            builder.append("^");
-            builder.append(product.getIsAvailable());
-
-            bufferedWriter.write(builder.toString());
-            bufferedWriter.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        writeProductFile(productFile, product);
 
         return productFile.getPath();
     }
 
-    public static void addProductToProductsFile(Product product, String path) {
-        File productsFile = new File("cafe" + File.separator + "products.cafe");
+    public static void writeProductFile(File productFile, Product product) throws IOException {
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(productFile))) {
 
-        try(FileWriter fileWriter = new FileWriter(productsFile, true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
+            bufferedWriter.write(String.format("%s^%s^%s^%s^%s",
+                    product.getName(),
+                    product.getPrice(),
+                    product.getDescription(),
+                    product.getCategory(),
+                    product.getIsAvailable()));
+            bufferedWriter.flush();
+        }
+    }
+
+    public static void addProductToProductsFile(Product product, String pathProductFile) throws IOException {
+        File generalFile = new File(pathGeneralFile);
+
+        try(BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(generalFile, true))) {
 
             // product_name^/path/to/product^is_available
-            StringBuilder builder = new StringBuilder(product.getName());
-            builder.append("^/");
-            builder.append(path);
-            builder.append("/isAvailable^");
-            builder.append(product.getIsAvailable());
-
-            bufferedWriter.write(builder.toString());
-            bufferedWriter.newLine();
+            bufferedWriter.write(String.format("%s^/%s%s%s",
+                    product.getName(),
+                    pathProductFile,
+                    "/isAvailable^",
+                    product.getIsAvailable()));
             bufferedWriter.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
