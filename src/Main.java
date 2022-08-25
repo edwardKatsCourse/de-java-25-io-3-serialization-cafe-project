@@ -1,30 +1,38 @@
-import entity.Product;
-import impl.ProductCreationImpl;
-import impl.ProductDeletingImpl;
-import impl.ProductReadingImpl;
+import com.company.model.Product;
+import com.company.repository.ProductPersistenceRepository;
+import com.company.repository.impl.ProductPersistenceRepositoryImpl;
+import com.company.service.*;
+import com.company.service.impl.*;
+import com.company.utils.ConsoleUtils;
 
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
 
-        ProductCreationImpl implCreation = new ProductCreationImpl();
-        ProductReadingImpl implReading = new ProductReadingImpl();
-        ProductDeletingImpl implDeleting = new ProductDeletingImpl();
-       // implCreation.createProduct();
+    private static final ProductCreationService productCreationService = new ProductCreationServiceImpl();
+    private static final ProductReadingService productReadingService = new ProductReadingServiceImpl();
+    private static final ProductDeletingService productDeletingService = new ProductDeletingServiceImpl();
 
-//        System.out.println("Available products:");
-//        implReading.listProductNamesAvailable();
-//        System.out.println("\nAll products:");
-//        implReading.listProductNames();
+    private static final ProductPersistenceRepository persistenceRepository = new ProductPersistenceRepositoryImpl();
+    public static void main(String[] args) {
 
-       // implReading.listProductInfoProductsFile("milk");
+        productCreationService.createProduct(readProduct());
 
-        //implReading.listProductInfoSearchByCategory(new Product("coffee", 2.5, "justCoffee", "drinks", true));
-       // implReading.listProductInfoSearchByCategory(new Product("coffee", 2.5, "justCoffee", "dr", true));
-        //implReading.listProductInfoSearchByCategory(new Product("cof", 2.5, "justCoffee", "drinks", true));
+        System.out.println(persistenceRepository.getProductList());
+        System.out.println(persistenceRepository.getProductMap());
+    }
 
-        //impl.deleteProductByLookup(new Product("coffee", 2.5, "justCoffee", "drinks", true));
-        implDeleting.deleteProductByFullPath(new Product("coffee", 2.5, "justCoffee", "drinks", true));
+    private static Product readProduct() {
+        String name = ConsoleUtils.getConsoleInput("Enter the product's name");
+        double price = Double.parseDouble(
+                ConsoleUtils.getConsoleInput("Enter the product's price")
+        );
+        String description = ConsoleUtils.getConsoleInput("Enter the product's description");
+        String category = ConsoleUtils.getConsoleInput("Enter the product's category");
+        boolean isAvailable = Boolean.parseBoolean(
+                ConsoleUtils.getConsoleInput("Enter the product's isAvailable")
+        );
+
+        return new Product(name, price, description, category, isAvailable);
     }
 }

@@ -1,6 +1,0 @@
-tee^/cafe/products/drinks/tee.cafe/isAvailable^true
-cola^/cafe/products/drinks/cola.cafe/isAvailable^true
-soup^/cafe/products/soup/soup.cafe/isAvailable^false
-brötchen^/cafe/products/brot/brötchen.cafe/isAvailable^false
-brioche^/cafe/products/brot/brioche.cafe/isAvailable^true
-döner^/cafe/products/meal/döner.cafe/isAvailable^true

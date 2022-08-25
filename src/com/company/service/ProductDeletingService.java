@@ -1,6 +1,6 @@
-package service;
+package com.company.service;
 
-import entity.Product;
+import com.company.model.Product;
 
 import java.io.IOException;
 

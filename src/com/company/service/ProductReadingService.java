@@ -1,6 +1,4 @@
-package service;
-
-import entity.Product;
+package com.company.service;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +9,7 @@ public interface ProductReadingService {
 
     List<String> listProductNamesAvailable() throws IOException;
 
-    String listProductInfoProductsFile(Product product) throws IOException;
+    String findProductInfo(String productPath) throws IOException;
 
-    String listProductInfoSearchByCategory(Product product) throws IOException;
+    String findProductInfo(String category, String productName) throws IOException;
 }
